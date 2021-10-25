@@ -24,7 +24,7 @@ def extract_values(line):
 
     # Rain
     rain = clean[5].replace(" ---","0.00").replace("---","0.00").replace("--- ","0.00")
-    rain = "".join([k for k in rain if k not in special_chars])
+    rain = "".join([k for k in rain if k not in special_chars]) # Delete special characters
 
 
     return [year, month, rain]
@@ -33,11 +33,14 @@ def extract_values(line):
 def file_to_df(filepath):
     '''Turn text file into pandas df.'''
 
+    # Identify location
+    location = filepath.split('/')[-1].split('.')[0]
+
     with open(filepath,'rt',encoding='utf-8') as file:
         lines = file.readlines()[2:]
 
         # Create empty final df
-        result = pd.DataFrame(index=range(0, len(lines)), columns=['year','month','rain'])
+        result = pd.DataFrame(index=range(0, len(lines)), columns=['year','month','rain_mm'])
 
         # Iterate over lines of text
         for i, line in enumerate(lines):
@@ -47,13 +50,14 @@ def file_to_df(filepath):
             result.iloc[i] = to_append
 
     # Format data type
-    result.year = df.year.astype(int)
-    result.month = df.month.astype(int)
-    result.rain = df.rain.astype(float)
+    result.year = result.year.astype(int)
+    result.month = result.month.astype(int)
+    result.rain_mm = result.rain_mm.astype(float)
 
     # Add timestamp
     result['timestamp'] = result.apply(lambda row: datetime.strptime(f"{int(row.year)}-{int(row.month)}-15", '%Y-%m-%d'), axis=1)
-    result = result[['timestamp','year','month','rain']]
+    result['location'] = location
+    result = result[['timestamp','year','month','location','rain_mm']]
 
     return result
 
@@ -62,32 +66,18 @@ def file_to_df(filepath):
 root = os.path.abspath(os.path.join("__file__", "../../"))
 
 # Read data
-# Raw
-cambridge_raw = pd.read_csv(root + '/data/Cambridge.txt')
-eastbourne_raw = pd.read_csv(root + '/data/Eastbourne.txt')
 # Cleaned
 cambridge = file_to_df(filepath = root + '/data/Cambridge.txt')
 eastbourne = file_to_df(filepath = root + '/data/Eastbourne.txt')
+heathrow = file_to_df(filepath = root + '/data/Heathrow.txt')
+lowestoft = file_to_df(filepath = root + '/data/Lowestoft.txt')
+manston = file_to_df(filepath = root + '/data/Manston.txt')
+oxford = file_to_df(filepath = root + '/data/Oxford.txt')
 
-
-
-
-
-
-
-with open(root + '/data/Oxford.txt','rt',encoding='utf-8') as file:
-    lines = file.readlines()[2:]
-
-    df = pd.DataFrame(index=range(0, len(lines)), columns=['year','month','rain'])
-    lens = []
-    for i, line in enumerate(lines):
-        print(extract_values(line))
-
-
-
-
-
-
-
-
-
+# Dump data
+cambridge.to_csv(root + '/data/clean/cambridge.csv')
+eastbourne.to_csv(root + '/data/clean/eastbourne.csv')
+heathrow.to_csv(root + '/data/clean/heathrow.csv')
+lowestoft.to_csv(root + '/data/clean/lowestoft.csv')
+manston.to_csv(root + '/data/clean/manston.csv')
+oxford.to_csv(root + '/data/clean/oxford.csv')
