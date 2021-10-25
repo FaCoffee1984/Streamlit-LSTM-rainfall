@@ -12,7 +12,6 @@ def slice_data(data, cutoff):
     return data
 
 
-
 # Set root dir
 root = os.path.abspath(os.path.join("__file__", "../.."))
 
@@ -24,7 +23,6 @@ heathrow = slice_data(pd.read_csv(root + '/data/clean/heathrow.csv', parse_dates
 lowestoft = slice_data(pd.read_csv(root + '/data/clean/lowestoft.csv', parse_dates=['timestamp'], index_col=0), cutoff=cutoff)
 manston = slice_data(pd.read_csv(root + '/data/clean/manston.csv', parse_dates=['timestamp'], index_col=0), cutoff=cutoff)
 oxford = slice_data(pd.read_csv(root + '/data/clean/oxford.csv', parse_dates=['timestamp'], index_col=0),cutoff=cutoff)
-
 
 
 # Plot
