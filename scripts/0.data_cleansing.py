@@ -1,43 +1,32 @@
 import os
 import pandas as pd
 from datetime import datetime
+import re
 
 
 def extract_values(line):
     '''Extract numerical values from text lines.'''
 
     # Split line
-    line = line.split('   ')
+    line_split = line.split('   ')
+
+    # Extract clean items
+    clean = [ei for e in line_split for ei in e.strip().split()]
 
     # Special characters
     special_chars = ["$", "@", "#", "&", "%", "*", "-", "~", "?", "/", "!"]
 
     # Year
-    time = line[1].split('  ')
-    year = int(time[0])
+    year = int(clean[0])
 
     # Month
-    if len(time) > 1:
-        month = int(time[1])
-    else:
-        month = int(line[2])
+    month = int(clean[1])
 
     # Rain
-    if len(line) == 7:
-        rain = str(line[4][2:]).replace(" ---","0.00").replace("---","0.00").replace("--- ","0.00")
+    rain = clean[5].replace(" ---","0.00").replace("---","0.00").replace("--- ","0.00")
+    rain = "".join([k for k in rain if k not in special_chars])
 
-    if len(line) == 8:
-        rain = str(line[6][1:]).replace(" ---","0.00").replace("---","0.00").replace("--- ","0.00")
 
-    if len(line) == 9:
-        rain = str(line[7][1:]).replace(" ---","0.00").replace("---","0.00").replace("--- ","0.00")
-
-    if len(line) == 10:
-        rain = str(line[8][1:]).replace(" ---","0.00").replace("---","0.00").replace("--- ","0.00")
-
-    # Get rid of special characters
-    rain = float("".join([k for k in rain if k not in special_chars]))   
-        
     return [year, month, rain]
 
 
@@ -86,16 +75,15 @@ eastbourne = file_to_df(filepath = root + '/data/Eastbourne.txt')
 
 
 
-with open(root + '/data/Eastbourne.txt','rt',encoding='utf-8') as file:
+with open(root + '/data/Oxford.txt','rt',encoding='utf-8') as file:
     lines = file.readlines()[2:]
 
     df = pd.DataFrame(index=range(0, len(lines)), columns=['year','month','rain'])
-
+    lens = []
     for i, line in enumerate(lines):
-        line = line.split('   ')
-        print(len(line))
+        print(extract_values(line))
 
-        to_append = extract_values(line)
+
 
 
 
