@@ -67,12 +67,12 @@ root = os.path.abspath(os.path.join("__file__", "../../"))
 
 # Read data
 # Cleaned
-cambridge = file_to_df(filepath = root + '/data/Cambridge.txt')
-eastbourne = file_to_df(filepath = root + '/data/Eastbourne.txt')
-heathrow = file_to_df(filepath = root + '/data/Heathrow.txt')
-lowestoft = file_to_df(filepath = root + '/data/Lowestoft.txt')
-manston = file_to_df(filepath = root + '/data/Manston.txt')
-oxford = file_to_df(filepath = root + '/data/Oxford.txt')
+cambridge = file_to_df(filepath = root + '/data/raw/Cambridge.txt')
+eastbourne = file_to_df(filepath = root + '/data/raw/Eastbourne.txt')
+heathrow = file_to_df(filepath = root + '/data/raw/Heathrow.txt')
+lowestoft = file_to_df(filepath = root + '/data/raw/Lowestoft.txt')
+manston = file_to_df(filepath = root + '/data/raw/Manston.txt')
+oxford = file_to_df(filepath = root + '/data/raw/Oxford.txt')
 
 # Dump data
 cambridge.to_csv(root + '/data/clean/cambridge.csv')
