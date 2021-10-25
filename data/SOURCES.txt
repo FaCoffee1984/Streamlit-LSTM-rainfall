@@ -1,0 +1,8 @@
+https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/cambridgedata.txt
+https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/manstondata.txt
+https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/eastbournedata.txt
+https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/lowestoftdata.txt
+https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/heathrowdata.txt
+https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/oxforddata.txt
+
+
