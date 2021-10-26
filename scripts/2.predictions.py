@@ -3,9 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from tensorflow import keras
-from tensorflow.keras.models import Model
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Bidirectional, Dropout
 
@@ -140,6 +137,24 @@ def model_performance(n_past, n_future, past_train, future_train, n_epochs):
     loss = history.history['loss']
 
     return model, history, acc, loss
+
+
+def plot_performance():
+    '''Plot model accuracy an dlosses during training.'''
+
+    return
+
+
+def evaluate(validation, model):
+    '''Compute MRSE during evaluation and plot.'''
+
+    return
+
+
+def serialise(dict):
+    '''Create pickle file from dictionary.'''
+
+    return
 
 
 # Set root dir
