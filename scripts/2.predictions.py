@@ -134,7 +134,7 @@ def fit_lstm(n_past, n_future, past_train, future_train, n_epochs):
 def model_performance(n_past, n_future, past_train, future_train, n_epochs):
     '''Fit LSTM models and capture training performance.'''
 
-    model, history = fit_lstm(n_past=n_past, n_future=n_future, past_train=cbg_p, future_train=cbg_f, n_epochs=n_epochs)
+    model, history = fit_lstm(n_past=n_past, n_future=n_future, past_train=past_train, future_train=future_train, n_epochs=n_epochs)
 
     acc = history.history['acc']
     loss = history.history['loss']
@@ -182,11 +182,9 @@ for location in locations:
 
 
 
-cbg_model, cbg_history = fit_lstm(n_past=n_past, n_future=n_future, past_train=cbg_p, future_train=cbg_f, n_epochs=n_epochs)
-
 # Plot accuracy and losses
-acc = cbg_history.history['acc']
-loss = cbg_history.history['loss']
+acc = history['acc']
+loss = history['loss']
 plt.plot(range(0,n_epochs), acc, label='acc')
 plt.plot(range(0,n_epochs), loss, label='loss', color='red')
 plt.legend()
