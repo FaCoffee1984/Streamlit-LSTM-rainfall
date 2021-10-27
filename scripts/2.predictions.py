@@ -287,7 +287,6 @@ def evaluate(container, ):
         plt.grid("on")
 
 
-
     return predictions, validation, difference, rmse, ax
 
 
@@ -317,7 +316,7 @@ n_epochs = 500
 locations = ['cambridge','eastbourne','heathrow','lowestoft','manston','oxford']
 
 # Bulk processing
-training_performance = process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs)
+training_performance = process_bulk_locations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs)
 
 # Plot training performance
 ax = plot_training_performance(training_performance, n_epochs)
