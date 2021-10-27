@@ -26,7 +26,9 @@
 -
 
 ## 3. Snapshots
-- Rainfall time series for the 6 locations. These represent monthly average rainfall in mm from January 2000 to September 2021.
+- **Rainfall time series for the 6 locations**. </br> 
+These represent monthly average rainfall in mm from January 2000 to September 2021.
 <img src="images/Rainfall_time_series.png" width="700" height="400"/></br>
-- Accuracy vs Loss as measured during training for the 6 locations.
+- **Accuracy vs Loss as measured during training for the 6 locations**.</br>
+The areas circled in black represent batches of data where the model failed to perform with the same accuracy. The reason for this is most likely in the physical process behind the data collection: when extreme events occur, such as severe storms, the rainfall measurements can be many times larger than the average values. Also, because these events are few and far between, it becomes difficult for a model to take them into account, and they end up being assimilated as noise. This noise affects the ability of the model to generalise, leading to poorer predictions.
 <img src="images/Accuracy_vs_Losses.png" width="700" height="400"/></br>
