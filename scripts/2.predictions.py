@@ -180,8 +180,8 @@ def plot_training_performance(container, n_epochs):
 
     for i, location in enumerate(container.keys()):
 
-        acc = container[location][2]
-        loss = container[location][3]
+        acc = container[location][1]
+        loss = container[location][2]
 
         plt.subplot(3, 2, i+1)
         plt.plot(x, loss, color='red', label='loss')
@@ -221,8 +221,8 @@ cutoff1 = '2000-01-15'
 cutoff2 = '2018-01-15'
 
 # Parameters
-n_past = 120
-n_future = 24
+n_past = 120 #10 years
+n_future = 24 #2 years
 column_index = 4 #"rain_mm" has column_index=4
 n_epochs = 500
 
@@ -231,6 +231,14 @@ locations = ['cambridge','eastbourne','heathrow','lowestoft','manston','oxford']
 
 # Bulk processing
 training_performance = process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs)
+
+# Plot training performance
+ax = plot_training_performance(training_performance, n_epochs)
+
+
+
+
+
 
 
 
@@ -257,8 +265,7 @@ for location in locations:
     container[location] = [model, history, acc, loss, validation, sc]
 
 
-# Plot training performance
-ax = plot_training_performance(container, n_epochs=n_epochs)
+
 
 
 
