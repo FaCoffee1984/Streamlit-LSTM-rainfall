@@ -43,6 +43,7 @@ def extract_data(input_data, column_index):
 def scale_data(data):
     '''Apply feature scaling.'''
 
+    # Initialise and apply scaler
     sc = StandardScaler(with_mean=True, with_std=True)
     scaled = sc.fit_transform(data)
 
@@ -74,7 +75,7 @@ def past_future_windows(scaled_data, n_past, n_future):
     return past, future
 
 
-def pipeline(filepath, cutoff1, cutoff2, column_index, n_past, n_future):
+def pipeline(filepath, cutoff1, column_index, n_past, n_future):
     '''Apply pipeline to input data. 
        Steps:
        - 1. Read data
@@ -157,7 +158,7 @@ def model_performance(n_past, n_future, past_train, future_train, n_epochs):
     return model, acc, loss
 
 
-def process_bulk_locations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs):
+def process_bulk_locations(locations, cutoff1, column_index, n_past, n_future, n_epochs):
     '''For each location, perform the following steps:
        - 1. Identify filepath
        - 2. Generate past, future, validation datasets and scaler
@@ -177,7 +178,7 @@ def process_bulk_locations(locations, cutoff1, cutoff2, column_index, n_past, n_
 
         # Extract past, future, validation datasets
         print('Extracting past, future, validation datasets')
-        past, future, validation, sc, result_timestamp, validation_timestamp = pipeline(filepath=filepath, cutoff1=cutoff1, cutoff2=cutoff2, 
+        past, future, validation, sc, result_timestamp, validation_timestamp = pipeline(filepath=filepath, cutoff1=cutoff1,  
                                             column_index=column_index, n_past=n_past, n_future=n_future)
 
         # Fit model and compute performance
@@ -320,7 +321,7 @@ n_epochs = 500
 locations = ['cambridge','eastbourne','heathrow','lowestoft','manston','oxford']
 
 # Bulk processing
-training_performance = process_bulk_locations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs)
+training_performance = process_bulk_locations(locations, cutoff1, column_index, n_past, n_future, n_epochs)
 
 # Plot training performance
 ax = plot_training_performance(training_performance, n_epochs)
