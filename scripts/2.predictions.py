@@ -41,7 +41,7 @@ def scale_data(data):
     sc = StandardScaler(with_mean=True, with_std=True)
     scaled = sc.fit_transform(data)
 
-    return scaled
+    return scaled, sc
 
 
 def train_time_windows(scaled_data, n_past, n_future):
@@ -83,11 +83,11 @@ def pipeline(filepath, cutoff1, cutoff2, column_index, n_past, n_future):
     result1 = read_data(filepath=filepath)
     result2, validation = slice_data(result1, cutoff1=cutoff1, cutoff2=cutoff2)
     result2, validation = extract_data(result2, column_index=column_index), extract_data(validation, column_index=column_index)
-    result2 = scale_data(result2)
+    result2, sc = scale_data(result2)
 
     past, future = train_time_windows(result2, n_past, n_future)
 
-    return past, future, validation
+    return past, future, validation, sc
 
 
 def fit_lstm(n_past, n_future, past_train, future_train, n_epochs):
@@ -166,7 +166,7 @@ def plot_training_performance(container, n_epochs):
     return ax
 
 
-def evaluate(validation, model):
+def evaluate(container):
     '''Compute MRSE during evaluation and plot.'''
 
     return
@@ -203,7 +203,7 @@ for location in locations:
 
     # Extract past, future, validation datasets
     print('Extracting past, future, validation datasets')
-    past, future, validation = pipeline(filepath=filepath, cutoff1=cutoff1, cutoff2=cutoff2, 
+    past, future, validation, sc = pipeline(filepath=filepath, cutoff1=cutoff1, cutoff2=cutoff2, 
                                         column_index=column_index, n_past=n_past, n_future=n_future)
 
     # Fit model and compute performance
@@ -211,7 +211,7 @@ for location in locations:
     model, history, acc, loss = model_performance(n_past=n_past, n_future=n_future, past_train=past, future_train=future, n_epochs=n_epochs)
 
     print('Storing everything in container')
-    container[location] = [model, history, acc, loss]
+    container[location] = [model, history, acc, loss, validation, sc]
 
 
 # Plot training performance
