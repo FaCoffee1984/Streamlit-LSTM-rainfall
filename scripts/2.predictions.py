@@ -143,22 +143,25 @@ def fit_lstm(n_past, n_future, past_train, future_train, n_epochs):
 def model_performance(n_past, n_future, past_train, future_train, n_epochs):
     '''Fit LSTM models and capture training performance.'''
 
+    # Fit models
     model, history = fit_lstm(n_past=n_past, n_future=n_future, past_train=past_train, future_train=future_train, n_epochs=n_epochs)
 
+    # Grab accuracy and loss values
     acc = history.history['acc']
     loss = history.history['loss']
 
     return model, acc, loss
 
 
-def process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs):
-    '''For each station, perform the following steps:
+def process_bulk_locations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs):
+    '''For each location, perform the following steps:
        - 1. Identify filepath
        - 2. Generate past, future, validation datasets and scaler
        - 3. Fit model
        - 4. Store everything in a dictionary
     '''
 
+    # Empty container
     results = {}
 
     for location in locations:
@@ -184,7 +187,9 @@ def process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_f
 
 
 def plot_training_performance(container, n_epochs):
-    '''Plot model accuracy and losses during training.'''
+    '''Plot model accuracy and losses during training. 
+       "container" is the output of the "process_bulk_locations" function.
+    '''
 
     # Declare final figure
     ax = plt.figure(figsize=(20, 10))
@@ -265,13 +270,13 @@ def evaluate(container, ):
         difference = validation - predictions
 
         # Plot
-        x = len(predictions)
+        x = container[location][6] #Grab validation timestamps
 
         plt.subplot(3, 2, i+1)
 
         plt.plot(x, validation, color='navy', label='validation')
         plt.plot(x, predictions, color='red', label='predictions')
-        plt.plot(x, difference, color='red', label='difference')
+        plt.plot(x, difference, color='k', label='difference')
 
         plt.legend()
         plt.xlabel("Time")
@@ -283,7 +288,7 @@ def evaluate(container, ):
 
 
 
-    return predictions, validation, rmse, ax
+    return predictions, validation, difference, rmse, ax
 
 
 def serialise(dict):
