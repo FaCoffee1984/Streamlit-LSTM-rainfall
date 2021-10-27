@@ -139,10 +139,31 @@ def model_performance(n_past, n_future, past_train, future_train, n_epochs):
     return model, history, acc, loss
 
 
-def plot_performance():
-    '''Plot model accuracy an dlosses during training.'''
+def plot_training_performance(container, n_epochs):
+    '''Plot model accuracy and losses during training.'''
 
-    return
+    ax = plt.figure(figsize=(20, 10))
+
+    x = range(0, n_epochs)
+
+    for i, location in enumerate(container.keys()):
+
+        acc = container[location][2]
+        loss = container[location][3]
+
+        plt.subplot(3, 2, i+1)
+        plt.plot(x, loss, color='red', label='loss')
+        plt.plot(x, acc, color='navy', label='acc')
+
+        plt.legend()
+        plt.xlabel("Epochs")
+        plt.ylabel("Values")
+        plt.ylim(0,1.0)
+        plt.title("Accuracy vs loss for "+location, fontsize=13)
+        plt.tight_layout()
+        plt.grid("on")
+
+    return ax
 
 
 def evaluate(validation, model):
@@ -191,6 +212,10 @@ for location in locations:
 
     print('Storing everything in container')
     container[location] = [model, history, acc, loss]
+
+
+# Plot training performance
+ax = plot_training_performance(container, n_epochs=n_epochs)
 
 
 
