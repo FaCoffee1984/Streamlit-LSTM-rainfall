@@ -136,7 +136,39 @@ def model_performance(n_past, n_future, past_train, future_train, n_epochs):
     acc = history.history['acc']
     loss = history.history['loss']
 
-    return model, history, acc, loss
+    return model, acc, loss
+
+
+def process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs):
+    '''For each station, perform the following steps:
+       - 1. Identify filepath
+       - 2. Generate past, future, validation datasets and scaler
+       - 3. Fit model
+       - 4. Store everything in a dictionary
+    '''
+
+    results = {}
+
+    for location in locations:
+
+        print('Location: '+location)
+
+        # Identify correct filepath
+        filepath = root + '/data/clean/'+str(location)+'.csv'
+
+        # Extract past, future, validation datasets
+        print('Extracting past, future, validation datasets')
+        past, future, validation, sc = pipeline(filepath=filepath, cutoff1=cutoff1, cutoff2=cutoff2, 
+                                            column_index=column_index, n_past=n_past, n_future=n_future)
+
+        # Fit model and compute performance
+        print('Fitting model')
+        model, acc, loss = model_performance(n_past=n_past, n_future=n_future, past_train=past, future_train=future, n_epochs=n_epochs)
+
+        print('Storing everything in container')
+        results[location] = [model, acc, loss, validation, sc]
+
+    return results
 
 
 def plot_training_performance(container, n_epochs):
@@ -178,19 +210,30 @@ def serialise(dict):
     return
 
 
+# =========== MAIN ===========
+
+
 # Set root dir
 root = os.path.abspath(os.path.join("__file__", "../.."))
 
-# Data ingestion and processing pipeline; "rain_mm" has column_index=4
+# Cutoff dates
 cutoff1 = '2000-01-15'
 cutoff2 = '2018-01-15'
 
+# Parameters
 n_past = 120
 n_future = 24
-column_index = 4
+column_index = 4 #"rain_mm" has column_index=4
 n_epochs = 500
 
+# Locations
 locations = ['cambridge','eastbourne','heathrow','lowestoft','manston','oxford']
+
+# Bulk processing
+training_performance = process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_future, n_epochs)
+
+
+
 
 container = {}
 
