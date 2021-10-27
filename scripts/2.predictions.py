@@ -18,8 +18,8 @@ def read_data(filepath):
 
 def slice_data(data, cutoff1, n_future):
     '''Slice data along the temporal axis.
-       Cutoff1: how far back in time to go
-       Cutoff2: timestamp past which the data are used for validation
+       Cutoff1: how far back in time to go (eg, '1986-02-15')
+       n_future: length of the future predictions (used for predictions and validation)
     '''
 
     # Select train data between the cutoff and the end of the time series MINUS the length of the future window (see "past_future_windows")
