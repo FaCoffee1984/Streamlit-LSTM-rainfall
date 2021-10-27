@@ -240,38 +240,6 @@ ax = plot_training_performance(training_performance, n_epochs)
 
 
 
-
-
-
-container = {}
-
-for location in locations:
-
-    print('Location: '+location)
-
-    # Identify correct filepath
-    filepath = root + '/data/clean/'+str(location)+'.csv'
-
-    # Extract past, future, validation datasets
-    print('Extracting past, future, validation datasets')
-    past, future, validation, sc = pipeline(filepath=filepath, cutoff1=cutoff1, cutoff2=cutoff2, 
-                                        column_index=column_index, n_past=n_past, n_future=n_future)
-
-    # Fit model and compute performance
-    print('Fitting model')
-    model, history, acc, loss = model_performance(n_past=n_past, n_future=n_future, past_train=past, future_train=future, n_epochs=n_epochs)
-
-    print('Storing everything in container')
-    container[location] = [model, history, acc, loss, validation, sc]
-
-
-
-
-
-
-
-
-
 # Plot accuracy and losses
 acc = history['acc']
 loss = history['loss']
