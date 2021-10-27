@@ -26,7 +26,7 @@
 -
 
 ## 3. Snapshots
-
+![Time series visualisation](Images/Time_series_rainfall.png)
 
 -
 
