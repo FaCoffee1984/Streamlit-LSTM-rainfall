@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Bidirectional, Dropout
 
@@ -73,21 +74,32 @@ def pipeline(filepath, cutoff1, cutoff2, column_index, n_past, n_future):
     '''Apply pipeline to input data. 
        Steps:
        - 1. Read data
-       - 2. Slice data (ignore data that are too old)
+       - 2. Slice data (ignore data that are too old) and retrieve timestamps
        - 3. Extract data
        - 4. Scale train data
        - 5. Obtain past and future data
        - 6. Return values
     '''
 
+    # Read data
     result1 = read_data(filepath=filepath)
+
+    # Slice data
     result2, validation = slice_data(result1, cutoff1=cutoff1, cutoff2=cutoff2)
+
+    # Retrieve timestamps for future computations/plotting
+    result_timestamp, validation_timestamp = result2['timestamp'], validation['timestamp']
+
+    # Extract data
     result2, validation = extract_data(result2, column_index=column_index), extract_data(validation, column_index=column_index)
+
+    # Scale train data only (validation will be scaled by function "evaluate")
     result2, sc = scale_data(result2)
 
+    # Extract past and future values
     past, future = train_time_windows(result2, n_past, n_future)
 
-    return past, future, validation, sc
+    return past, future, validation, sc, result_timestamp, validation_timestamp
 
 
 def fit_lstm(n_past, n_future, past_train, future_train, n_epochs):
@@ -158,7 +170,7 @@ def process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_f
 
         # Extract past, future, validation datasets
         print('Extracting past, future, validation datasets')
-        past, future, validation, sc = pipeline(filepath=filepath, cutoff1=cutoff1, cutoff2=cutoff2, 
+        past, future, validation, sc, result_timestamp, validation_timestamp = pipeline(filepath=filepath, cutoff1=cutoff1, cutoff2=cutoff2, 
                                             column_index=column_index, n_past=n_past, n_future=n_future)
 
         # Fit model and compute performance
@@ -166,7 +178,7 @@ def process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_f
         model, acc, loss = model_performance(n_past=n_past, n_future=n_future, past_train=past, future_train=future, n_epochs=n_epochs)
 
         print('Storing everything in container')
-        results[location] = [model, acc, loss, validation, sc]
+        results[location] = [model, acc, loss, validation, sc, result_timestamp, validation_timestamp]
 
     return results
 
@@ -174,8 +186,10 @@ def process_bulk_stations(locations, cutoff1, cutoff2, column_index, n_past, n_f
 def plot_training_performance(container, n_epochs):
     '''Plot model accuracy and losses during training.'''
 
+    # Declare final figure
     ax = plt.figure(figsize=(20, 10))
 
+    # Grab x values
     x = range(0, n_epochs)
 
     for i, location in enumerate(container.keys()):
@@ -198,10 +212,78 @@ def plot_training_performance(container, n_epochs):
     return ax
 
 
-def evaluate(container):
+def compute_rmse(predictions, validation):
+    '''Compute Root Mean Squared Error (RMSE) between two sets of measurements: 
+       predictions and validation.
+    '''
+
+    # Turn input numpy 2D arrays into flat, 1D arrays
+    predictions1d = predictions.flatten()
+    validation1d = validation.flatten()
+
+    # Compute RMSE. Squared = True returns the variance.
+    rmse = mean_squared_error(predictions1d, validation1d, squared=False)
+
+    return rmse
+
+
+def evaluate(container, ):
     '''Compute MRSE during evaluation and plot.'''
 
-    return
+    # Declare final figure
+    ax = plt.figure(figsize=(20, 10))
+
+    for i, location in enumerate(container.keys()):
+
+        # Grab validation data and scaler from each time series
+        validation = container[location][3]
+        sc = container[location][4]
+
+        # Take validation data and scale them using the same scaler used in training 
+        # Because the modele expects to see scaled data as input
+        testing = sc.transform(validation)
+        # Create numpy array and reshape it like past and future
+        testing = np.array(testing)
+        testing = np.reshape(testing,(testing.shape[1],testing.shape[0],1))
+
+        # Grab relevant model
+        model = container[location][0]
+
+        # Make predictions on the testing data
+        predictions = model.predict(testing)
+
+        # Make inverse transformation 
+        predictions = sc.inverse_transform(predictions)
+
+        # Reshape to look like validation
+        predictions = np.reshape(predictions,(predictions.shape[1],predictions.shape[0]))
+
+        # Compute RMSE
+        rmse = compute_rmse(predictions, validation)
+
+        # Compute difference
+        difference = validation - predictions
+
+        # Plot
+        x = len(predictions)
+
+        plt.subplot(3, 2, i+1)
+
+        plt.plot(x, validation, color='navy', label='validation')
+        plt.plot(x, predictions, color='red', label='predictions')
+        plt.plot(x, difference, color='red', label='difference')
+
+        plt.legend()
+        plt.xlabel("Time")
+        plt.ylabel("Rainfall (mm)")
+        plt.ylim(0,1.0)
+        plt.title("Predictions vs Validation for: "+location, fontsize=13)
+        plt.tight_layout()
+        plt.grid("on")
+
+
+
+    return predictions, validation, rmse, ax
 
 
 def serialise(dict):
@@ -235,18 +317,3 @@ training_performance = process_bulk_stations(locations, cutoff1, cutoff2, column
 # Plot training performance
 ax = plot_training_performance(training_performance, n_epochs)
 
-
-
-
-
-
-# Plot accuracy and losses
-acc = history['acc']
-loss = history['loss']
-plt.plot(range(0,n_epochs), acc, label='acc')
-plt.plot(range(0,n_epochs), loss, label='loss', color='red')
-plt.legend()
-plt.xlabel("Epochs")
-plt.ylabel("Values")
-plt.ylim(0,1.0)
-plt.title("Accuracy vs loss for Cambridge")
