@@ -16,14 +16,18 @@ def read_data(filepath):
     return data
 
 
-def slice_data(data, cutoff1, cutoff2):
+def slice_data(data, cutoff1, n_future):
     '''Slice data along the temporal axis.
        Cutoff1: how far back in time to go
        Cutoff2: timestamp past which the data are used for validation
     '''
 
-    train = data[(data['timestamp'] >= cutoff1) & (data['timestamp'] < cutoff2)].reset_index(drop=True)
-    validation = data[data['timestamp'] >= cutoff2].reset_index(drop=True)
+    # Select train data between the cutoff and the end of the time series MINUS the length of the future window (see "past_future_windows")
+    data = data[(data['timestamp'] >= cutoff1)]
+    train = data.head(len(data)-n_future).reset_index(drop=True)
+
+    # Select validataion data to be the last n_future records of the input data
+    validation = data.tail(n_future).reset_index(drop=True)
 
     return train, validation
 
@@ -45,7 +49,7 @@ def scale_data(data):
     return scaled, sc
 
 
-def train_time_windows(scaled_data, n_past, n_future):
+def past_future_windows(scaled_data, n_past, n_future):
     '''Define two temporal windows: past and future, with different sizes, relative to each month in the time series.'''
 
     # Empty windows
@@ -85,7 +89,7 @@ def pipeline(filepath, cutoff1, cutoff2, column_index, n_past, n_future):
     result1 = read_data(filepath=filepath)
 
     # Slice data
-    result2, validation = slice_data(result1, cutoff1=cutoff1, cutoff2=cutoff2)
+    result2, validation = slice_data(result1, cutoff1=cutoff1, n_future=n_future)
 
     # Retrieve timestamps for future computations/plotting
     result_timestamp, validation_timestamp = result2['timestamp'], validation['timestamp']
@@ -97,7 +101,7 @@ def pipeline(filepath, cutoff1, cutoff2, column_index, n_past, n_future):
     result2, sc = scale_data(result2)
 
     # Extract past and future values
-    past, future = train_time_windows(result2, n_past, n_future)
+    past, future = past_future_windows(result2, n_past, n_future)
 
     return past, future, validation, sc, result_timestamp, validation_timestamp
 
@@ -232,7 +236,7 @@ def compute_rmse(predictions, validation):
     return rmse
 
 
-def evaluate(container, ):
+def evaluate(container):
     '''Compute MRSE during evaluation and plot.'''
 
     # Declare final figure
@@ -320,4 +324,7 @@ training_performance = process_bulk_locations(locations, cutoff1, cutoff2, colum
 
 # Plot training performance
 ax = plot_training_performance(training_performance, n_epochs)
+
+# Evaluation
+predictions, validation, difference, rmse, ax = evaluate(training_performance)
 
