@@ -26,7 +26,7 @@
 -
 
 ## 3. Snapshots
-![Time series visualisation](Images/Time_series_rainfall.png)
-
--
-
+- Rainfall time series for the 6 locations. These represent monthly average rainfall in mm from January 2000 to September 2021.
+<img src="images/Rainfall_time_series.png" width="700" height="400"/></br>
+- Accuracy vs Loss as measured during training for the 6 locations.
+<img src="images/Accuracy_vs_Losses.png" width="700" height="400"/></br>
