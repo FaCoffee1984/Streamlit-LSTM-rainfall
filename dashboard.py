@@ -6,6 +6,7 @@ import streamlit as st
 import altair as alt
 from streamlit_folium import folium_static
 import folium
+import pickle
 from branca.colormap import linear, LinearColormap
 
 '''
@@ -24,18 +25,26 @@ Streamlit will just skip executing the function altogether and will return the o
 previously stored in the cache.
 '''
 
+root = os.path.abspath(os.path.join("__file__", "../"))
+
 @st.cache  
-def read_data_from_pickles():
-    raw_data = pd.read_parquet('./data/weather_1980_to_2020.parquet')
-    raw_data['date'] = pd.to_datetime(raw_data.date)
-    raw_data['year'] = raw_data.date.dt.year
-    annual_stats = raw_data.fillna(0).groupby(['station_id', 'year']).agg(
-                            {'max_temp_c': ['mean'],
-                            'min_temp_c': ['mean'],
-                            'precip_mm': ['sum']}
-    ).reset_index()
-    annual_stats.columns = ['station_id', 'year', 'max_temp_c', 'min_temp_c', 'precip_mm']
-    return annual_stats
+def read_data_from_pickles(root):
+
+    with open('./Dash-LSTM-rainfall/results/evaluation/eval.pkl', 'rb') as f:
+        data = pickle.load(f)
+
+    # Extract data for all locations
+    cbg_pred = data['cambridge'][0]
+    cbg_val = data['cambridge'][1]
+
+    eas_pred = data['eastbourne'][0]
+    eas_val = data['eastbourne'][1]
+
+
+    # Return timeline for plots
+    timeline = data['cambridge'][5]['timestamp'].tolist()
+
+    return cbg_pred, cbg_val, timeline
 
 
 #==== Create title and introductive text
