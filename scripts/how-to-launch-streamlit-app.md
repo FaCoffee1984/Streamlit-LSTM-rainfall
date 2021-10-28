@@ -3,15 +3,15 @@
 1. Launch Anaconda Prompt
 2. Activate the conda environment where your project was created
   ```command
-    activate <env-name>
+     activate <env-name>
   ```
-3. Navigate to the folder where the app script is:
+3. Navigate to the folder where the app script is. After `(env-name) C:\Users\USERNAME>`, type:
   ```command
-    (env-name) C:\Users\USERNAME> cd C:\Users\USERNAME\project-folder\project-name\scripts
+     cd C:\Users\USERNAME\project-folder\project-name\scripts
   ```
-4. Type:
+4. After `(env-name) C:\Users\USERNAME\project-folder\project-name\scripts>`, type:
   ```command
-    (env-name) C:\Users\USERNAME\project-folder\project-name\scripts> streamlit run <app-filename>.py
+     streamlit run <app-filename>.py
   ```
 5. This opens up a new tab in your default web browser (mine is Microsoft Edge), where you will see your app.
 6. If you can't see your app, go back to Anaconda Prompt, where you will see this:
