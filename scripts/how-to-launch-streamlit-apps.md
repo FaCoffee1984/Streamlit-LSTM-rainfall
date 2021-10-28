@@ -1,4 +1,4 @@
-**How to launch the Streamlit web app**
+**How to launch any Streamlit web app in DEV/showcase mode**
 
 1. Launch Anaconda Prompt
 2. Activate the conda environment where your project was created
