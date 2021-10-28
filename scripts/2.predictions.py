@@ -332,7 +332,6 @@ def serialise_values(dict, root, perf=None, eval=None, cutoff1=None, n_future=No
         for i, location in enumerate(dict.keys()):
             del dict[location][0] # Delete model from dict - already serialised
 
-
         # Define filename
         filename = root + '/results/training_performance/training_perf.pkl'
 
@@ -357,7 +356,7 @@ def serialise_values(dict, root, perf=None, eval=None, cutoff1=None, n_future=No
             dict[location].append(validation)
 
         # Define filename
-        filename = root + '/results/evaluation/'+location+'_eval.pkl'
+        filename = root + '/results/evaluation/eval.pkl'
 
         # Dump pickle object
         with open(filename, 'wb') as handle: # 'wb' stands for: write binary
@@ -397,9 +396,8 @@ evaluation, ax = evaluate(training_performance)
 # Save serialised models (.h5)
 serialise_models(training_performance, root)
 
-# Serialise training performance values
+# Save serialise training performance values
 serialise_values(dict=training_performance, root=root, perf=True)
-# 
-# #NB: training_performance also contains the trained models!
-serialise(training_performance['cambridge'][0], filepath = root + '/models/training_perf_and_models.pickle')
 
+# Save serialsied evaluation
+serialise_values(dict=evaluation, root=root, eval=True, cutoff1=cutoff1, n_future=n_future)
