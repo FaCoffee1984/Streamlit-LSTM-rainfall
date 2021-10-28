@@ -26,6 +26,6 @@
   
   Source: https://towardsdatascience.com/a-quick-tutorial-on-how-to-deploy-your-streamlit-app-to-heroku-874e1250dadd
      
-**To refresh the app and see any new changes:**
+**To refresh the app and see any new changes:**</br>
 Click on "RERUN" on the upper-right corner of the page.
 
