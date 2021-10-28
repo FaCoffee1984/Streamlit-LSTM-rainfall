@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 from tensorflow.keras.models import Sequential
@@ -243,6 +244,9 @@ def evaluate(container):
     # Declare final figure
     ax = plt.figure(figsize=(20, 10))
 
+    # Empty final container
+    evaluation = {}
+
     for i, location in enumerate(container.keys()):
 
         # Grab validation data and scaler from each time series
@@ -269,10 +273,13 @@ def evaluate(container):
         predictions = np.reshape(predictions,(predictions.shape[1],predictions.shape[0]))
 
         # Compute RMSE
-        rmse = compute_rmse(predictions, validation)
+        rmse = round(compute_rmse(predictions, validation),2)
 
         # Compute difference
         difference = validation - predictions
+
+        # Add values to evaluation dictionary
+        evaluation[location] = [predictions, validation, difference, rmse]
 
         # Plot
         x = container[location][6] #Grab validation timestamps
@@ -281,22 +288,25 @@ def evaluate(container):
 
         plt.plot(x, validation, color='navy', label='validation')
         plt.plot(x, predictions, color='red', label='predictions')
-        plt.plot(x, difference, color='k', label='difference')
+
+        plt.annotate("RMSE: "+str(rmse), (x[3],202))
 
         plt.legend()
         plt.xlabel("Time")
         plt.ylabel("Rainfall (mm)")
-        plt.ylim(0,1.0)
+        plt.ylim(0,250)
         plt.title("Predictions vs Validation for: "+location, fontsize=13)
         plt.tight_layout()
         plt.grid("on")
 
 
-    return predictions, validation, difference, rmse, ax
+    return evaluation, ax
 
 
 def serialise(dict):
     '''Create pickle file from dictionary.'''
+
+
 
     return
 
@@ -327,5 +337,5 @@ training_performance = process_bulk_locations(locations, cutoff1, column_index, 
 ax = plot_training_performance(training_performance, n_epochs)
 
 # Evaluation
-predictions, validation, difference, rmse, ax = evaluate(training_performance)
+evaluation, ax = evaluate(training_performance)
 
