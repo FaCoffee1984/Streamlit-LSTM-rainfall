@@ -9,7 +9,7 @@ This folder contains 6 Keras LSTM models trained using:
 The models are serialised using the HDF5 (.h5) format. To load a serialised Keras model, use:
 
 ```python
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 # load model
 model = load_model('model.h5')
