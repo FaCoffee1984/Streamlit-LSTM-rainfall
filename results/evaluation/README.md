@@ -11,4 +11,11 @@ eval.pkl
                    |------ rmse (float)
                    |------ training data (pandas df beginning with the cutoff date and ending with the exclusion of the last 24 n_future values)
                    |------ validation (pandas df containing the last 24 n_future values)
- ```                       
+ ```    
+ 
+ To load this pickle, use:
+ ```python
+    with open(filepath, 'rb') as f: #'rb' stands for "read binary"
+        x = pickle.load(f)
+ ```
+ 

@@ -12,3 +12,9 @@ training_perf.pkl
                          |------ result_timestamp (time index beginning with the cutoff date but without the last 24 n_future values)
                          |------ result_timestamp (time index with the last 24 n_future values)
  ```        
+
+ To load this pickle, use:
+ ```python
+    with open(filepath, 'rb') as f: #'rb' stands for "read binary"
+        x = pickle.load(f)
+ ```
