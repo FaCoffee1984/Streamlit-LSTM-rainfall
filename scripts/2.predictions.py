@@ -239,7 +239,7 @@ def compute_rmse(predictions, validation):
 
 
 def evaluate(container):
-    '''Compute MRSE during evaluation and plot.'''
+    '''Evaluate on unseen data, compute MRSE, and plot.'''
 
     # Declare final figure
     ax = plt.figure(figsize=(20, 10))
@@ -303,10 +303,65 @@ def evaluate(container):
     return evaluation, ax
 
 
-def serialise(dict):
-    '''Create pickle file from dictionary.'''
+def serialise_models(training_performance, root):
+    '''Save Keras model to filepath using HDF5 extension (.h5).'''
+
+    # Access trained models from training_performance dict
+    for i, location in enumerate(training_performance.keys()):
+        model = training_performance[location][0]
+
+        # Specify filename
+        filename = root+'/models/'+location+"_trained_model.h5"
+
+        # Save model
+        model.save(filename)
+
+    return
 
 
+def serialise_values(dict, root, perf=None, eval=None, cutoff1=None, n_future=None):
+    '''Create pickle file from dictionary and save it to filepath.
+       Differentiates between training_performance and evaluation dicts.
+       One between perf and eval needs to be True.
+       PS: If eval=True, "cutoff1" AND "n_future" must be provided.
+    '''
+
+    if perf is True:
+
+        # Remove model from dict as it is serialised by the "serialise_models" function
+        for i, location in enumerate(dict.keys()):
+            del dict[location][0] # Delete model from dict - already serialised
+
+
+        # Define filename
+        filename = root + '/results/training_performance/training_perf.pkl'
+
+        # Dump pickle object
+        with open(filename, 'wb') as handle: # 'wb' stands for: write binary
+            pickle.dump(dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+    if eval is True:
+
+        for i, location in enumerate(dict.keys()):
+            filepath = root + '/data/clean/'+str(location)+'.csv'
+
+            # Access training data
+            data = read_data(filepath)
+
+            # Slice data
+            train, validation = slice_data(data, cutoff1=cutoff1, n_future=n_future)
+
+            # Add train and validation dfs (with timestamps) to evaluation dict
+            dict[location].append(train)
+            dict[location].append(validation)
+
+        # Define filename
+        filename = root + '/results/evaluation/'+location+'_eval.pkl'
+
+        # Dump pickle object
+        with open(filename, 'wb') as handle: # 'wb' stands for: write binary
+            pickle.dump(dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     return
 
@@ -338,4 +393,13 @@ ax = plot_training_performance(training_performance, n_epochs)
 
 # Evaluation
 evaluation, ax = evaluate(training_performance)
+
+# Save serialised models (.h5)
+serialise_models(training_performance, root)
+
+# Serialise training performance values
+serialise_values(dict=training_performance, root=root, perf=True)
+# 
+# #NB: training_performance also contains the trained models!
+serialise(training_performance['cambridge'][0], filepath = root + '/models/training_perf_and_models.pickle')
 
