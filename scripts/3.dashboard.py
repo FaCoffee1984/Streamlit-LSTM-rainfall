@@ -1,4 +1,4 @@
-'''If you use Python 3..6, make sure you run pip install jinja2==2.11 before running these imports.'''
+'''If you use Python 3.6, make sure you run <pip install jinja2==2.11> before running these imports.'''
 
 import os
 import pandas as pd
