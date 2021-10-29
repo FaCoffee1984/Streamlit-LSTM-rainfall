@@ -125,7 +125,7 @@ coordinates = read_coordinates()
 main_map = make_map(values=values, coordinates=coordinates)
 
 #==== Create title and introductive text
-st.header("Title")
+st.header("Digital Solutions: combining ML and interactive viz")
 st.write("""
 Introduction
 """)
