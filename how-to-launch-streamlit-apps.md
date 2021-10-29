@@ -25,7 +25,9 @@
   If you copy and paste the Local URL onto your browser, it should show you your app.
   
   Source: https://towardsdatascience.com/a-quick-tutorial-on-how-to-deploy-your-streamlit-app-to-heroku-874e1250dadd
-     
+
+----
+
 **To refresh the app and see any new changes:**</br>
 An *i* sign will appear on the top-right. Click on "Rerun" to re-launch the app and see the new changes. 
 
