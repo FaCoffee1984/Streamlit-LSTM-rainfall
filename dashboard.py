@@ -95,7 +95,6 @@ def make_graphs(values, allow_output_mutation=True):
     return output 
 
     
-
 @st.cache(hash_funcs={folium.folium.Map: lambda _: None}, allow_output_mutation=True)
 def make_map(values, coordinates):
 
@@ -138,6 +137,7 @@ hide_menu_style = """
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-folium_static(main_map)
+# Rander map on the app
+folium_static(main_map, width=800, height=600)
 
 
