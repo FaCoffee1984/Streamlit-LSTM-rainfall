@@ -27,5 +27,6 @@
   Source: https://towardsdatascience.com/a-quick-tutorial-on-how-to-deploy-your-streamlit-app-to-heroku-874e1250dadd
      
 **To refresh the app and see any new changes:**</br>
-Click on "RERUN" on the upper-right corner of the page.
+An *i* sign will appear on the top-right. Click on "Rerun" to re-launch the app and see the new changes. 
 
+<img align="left" src="https://user-images.githubusercontent.com/60174218/139415243-eae10eec-4270-4823-8b78-a34999a39e3b.png" width="500" height="100"/></br>
