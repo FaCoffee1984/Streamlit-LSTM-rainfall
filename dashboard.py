@@ -12,10 +12,6 @@ import pickle
 from branca.colormap import linear, LinearColormap
 
 
-root = os.path.abspath(os.path.join("__file__", "../"))
-
-locations = ['cambridge', 'eastbourne', 'lowestoft', 'heathrow', 'manston', 'oxford']
-
 
 @st.cache  #Decorator caching data for faster runtimes
 def read_data_from_pickles(locations):
@@ -67,19 +63,20 @@ def read_coordinates():
         latitude = row['Lat']
         longitude = row['Lon']
 
-        coordinates[location] = [latitude, longitude]
+        coordinates[location.lower()] = [latitude, longitude]
 
     return coordinates
 
 
 @st.cache(allow_output_mutation=True)
-def make_graphs(values, location, allow_output_mutation=True):
+def make_graphs(values, allow_output_mutation=True):
 
     # Single location
     def single_location_graph(location):
 
         to_plot = values[location]
-        graph = alt.Chart(data=to_plot, mark="line", title="Avg monthly rainfall for: "+location.capitalize()).encode(
+        loc = location.capitalize()
+        graph = alt.Chart(data=to_plot, mark="line", title="Avg monthly rainfall for: "+loc).encode(
                           x=alt.X('date'), 
                           y=alt.Y('rain (mm)', scale=alt.Scale(domain=[0, 250])), 
                           color='type', 
@@ -87,11 +84,19 @@ def make_graphs(values, location, allow_output_mutation=True):
 
         return graph
 
+    # Produce graphs iteratively
+    output = {}
+
+    for location in values.keys():
+        
+        output[location] = single_location_graph(location)
+
+    return output 
+
     
 
-
 @st.cache(hash_funcs={folium.folium.Map: lambda _: None}, allow_output_mutation=True)
-def make_map(coordinates):
+def make_map(values, coordinates):
 
     # Create base map
     main_map = folium.Map(location=(51.65, 0.5), zoom_start=7)
@@ -105,42 +110,19 @@ def make_map(coordinates):
         # Add location markers
         folium.CircleMarker(location=[lat,lon],radius=5, tooltip=location, color='red', fill=True, fill_color='red',
                             popup = folium.Popup().add_child(
-                                            folium.features.VegaLite(json.dumps(np.arange(0,10,1),default=default))
+                                            folium.features.VegaLite(make_graphs(values)[location])
                                             )).add_to(main_map)
 
     return main_map
 
 
+#==== Run functions
+root = os.path.abspath(os.path.join("__file__", "../"))
+locations = ['cambridge', 'eastbourne', 'lowestoft', 'heathrow', 'manston', 'oxford']
 
-    colormap = linear.RdYlBu_08.scale(station_stats[field_to_color_by].quantile(0.05),
-                                      station_stats[field_to_color_by].quantile(0.95))
-    if reverse_colormap[field_to_color_by]:
-        colormap = LinearColormap(colors=list(reversed(colormap.colors)),
-                                  vmin=colormap.vmin,
-                                  vmax=colormap.vmax)
-    colormap.add_to(main_map)
-    metric_desc = metric_descs[field_to_color_by]
-    metric_unit = metric_units[field_to_color_by]
-    colormap.caption = metric_desc
-    colormap.add_to(main_map)
-    for _, city in station_stats.iterrows():
-        icon_color = colormap(city[field_to_color_by])
-        city_graph = city_graphs['for_map'][city.station_id][field_to_color_by]
-        folium.CircleMarker(location=[city.lat, city.lon],
-                    tooltip=f"{city.municipality}\n  value: {city[field_to_color_by]}{metric_unit}",
-                    fill=True,
-                    fill_color=icon_color,
-                    color=None,
-                    fill_opacity=0.7,
-                    radius=5,
-                    popup = folium.Popup().add_child(
-                                            folium.features.VegaLite(city_graph)
-                                            )
-                    ).add_to(main_map)
-    return main_map
-
-
-
+values = read_data_from_pickles(locations)
+coordinates = read_coordinates()
+main_map = make_map(values=values, coordinates=coordinates)
 
 #==== Create title and introductive text
 st.header("Title")
@@ -154,3 +136,7 @@ hide_menu_style = """
         </style>
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
+
+folium_static(main_map)
+
+
