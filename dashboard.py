@@ -27,24 +27,34 @@ previously stored in the cache.
 
 root = os.path.abspath(os.path.join("__file__", "../"))
 
+locations = ['cambridge', 'eastbourne', 'lowestoft', 'heathrow', 'manston', 'oxford']
+
 @st.cache  
-def read_data_from_pickles(root):
+def read_data_from_pickles(location):
 
     with open('./Dash-LSTM-rainfall/results/evaluation/eval.pkl', 'rb') as f:
         data = pickle.load(f)
 
     # Extract data for all locations
-    cbg_pred = data['cambridge'][0]
-    cbg_val = data['cambridge'][1]
+    values = {}
 
-    eas_pred = data['eastbourne'][0]
-    eas_val = data['eastbourne'][1]
+    for location in locations:
+        predictions = data[location][0]
+        validation = data[location][1]
 
+        values[location] = [predictions, validation]
 
-    # Return timeline for plots
+    # Extract timeline for plots
     timeline = data['cambridge'][5]['timestamp'].tolist()
 
-    return cbg_pred, cbg_val, timeline
+    return  values, timeline
+
+
+@st.cache
+def read_coordinates(root):
+
+
+
 
 
 #==== Create title and introductive text
