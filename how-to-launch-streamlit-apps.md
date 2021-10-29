@@ -7,13 +7,15 @@
   ```
 3. Navigate to the folder where the app script is. After `(env-name) C:\Users\USERNAME>`, type:
   ```command
-     cd C:\Users\USERNAME\project-folder\project-name\scripts
+     cd C:\Users\USERNAME\project-folder\project-name
   ```
-4. After `(env-name) C:\Users\USERNAME\project-folder\project-name\scripts>`, type:
+4. After `(env-name) C:\Users\USERNAME\project-folder\project-name>`, type:
   ```command
      streamlit run <app-filename>.py
   ```
-5. This opens up a new tab in your default web browser (mine is Microsoft Edge), where you will see your app.
+  PS: this will only work if your app.py script is in the project-name folder.</br>
+  
+5. The command at point 4 will open up a new tab in your default web browser (mine is Microsoft Edge), where you will see your app.
 6. If you can't see your app, go back to Anaconda Prompt, where you will see this:
   ```command
      You can now view your Streamlit app in your browser.
