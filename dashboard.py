@@ -80,7 +80,8 @@ def make_graphs(values, allow_output_mutation=True):
                           x=alt.X('date'), 
                           y=alt.Y('rain (mm)', scale=alt.Scale(domain=[0, 250])), 
                           color='type', 
-                          strokeDash='type')
+                          strokeDash='type').properties(padding=0, autosize=alt.AutoSizeParams(
+        type='pad', contains='content'))
 
         return graph
 
@@ -99,7 +100,7 @@ def make_graphs(values, allow_output_mutation=True):
 def make_map(values, coordinates):
 
     # Create base map
-    main_map = folium.Map(location=(51.65, 0.5), zoom_start=7)
+    main_map = folium.Map(location=(51.65, 0.5), zoom_start=7, width='100%', height='100%')
 
     # Add location markers
     for location in coordinates.keys():
@@ -108,8 +109,8 @@ def make_map(values, coordinates):
         lon = coordinates[location][1]
 
         # Add location markers
-        folium.CircleMarker(location=[lat,lon],radius=5, tooltip=location, color='red', fill=True, fill_color='red',
-                            popup = folium.Popup().add_child(
+        folium.CircleMarker(location=[lat,lon], radius=6, tooltip=location, color='red', fill=True, fill_color='red',
+                            popup = folium.Popup(max_width='100%').add_child(
                                             folium.features.VegaLite(make_graphs(values)[location])
                                             )).add_to(main_map)
 
