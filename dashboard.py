@@ -16,7 +16,7 @@ from branca.colormap import linear, LinearColormap
 @st.cache  #Decorator caching data for faster runtimes
 def read_data_from_pickles(locations):
 
-    with open('./Dash-LSTM-rainfall/results/evaluation/eval.pkl', 'rb') as f:
+    with open(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\results\evaluation\eval.pkl', 'rb') as f:
         data = pickle.load(f)
 
     # Extract data for all locations
@@ -53,7 +53,7 @@ def read_data_from_pickles(locations):
 @st.cache
 def read_coordinates():
 
-    base_file = pd.read_csv('./Dash-LSTM-rainfall/data/LOCATIONS.csv')
+    base_file = pd.read_csv(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\data\LOCATIONS.csv')
 
     # Extract data for all locations
     coordinates = {}
