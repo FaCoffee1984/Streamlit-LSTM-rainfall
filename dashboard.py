@@ -10,11 +10,15 @@ from streamlit_folium import folium_static
 import folium
 import pickle
 from branca.colormap import linear, LinearColormap
+import pydeck as pdk
+from dateutil.relativedelta import relativedelta # to add days or years
+import datetime as dt
 
 
 
-@st.cache  #Decorator caching data for faster runtimes
+#@st.cache  #Decorator caching data for faster runtimes
 def read_data_from_pickles(locations):
+    '''Read rainfall data and predictions from pickle file.'''
 
     with open(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\results\evaluation\eval.pkl', 'rb') as f:
         data = pickle.load(f)
@@ -52,6 +56,7 @@ def read_data_from_pickles(locations):
 
 @st.cache
 def read_coordinates():
+    '''Read coordinates from file.'''
 
     base_file = pd.read_csv(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\data\LOCATIONS.csv')
 
@@ -70,6 +75,7 @@ def read_coordinates():
 
 @st.cache(allow_output_mutation=True)
 def make_graphs(values, allow_output_mutation=True):
+    '''Create graphs for individual locations for Viz #1.'''
 
     # Single location
     def single_location_graph(location):
@@ -96,10 +102,11 @@ def make_graphs(values, allow_output_mutation=True):
 
     
 @st.cache(hash_funcs={folium.folium.Map: lambda _: None}, allow_output_mutation=True)
-def make_map(values, coordinates):
+def make_map1(values, coordinates):
+    '''Create map for Viz #1.'''
 
     # Create base map
-    main_map = folium.Map(location=(51.65, 0.5), zoom_start=7, width='100%', height='100%')
+    map1 = folium.Map(location=(51.65, 0.5), zoom_start=7, width='100%', height='100%')
 
     # Add location markers
     for location in coordinates.keys():
@@ -111,20 +118,97 @@ def make_map(values, coordinates):
         folium.CircleMarker(location=[lat,lon], radius=6, tooltip=location, color='red', fill=True, fill_color='red',
                             popup = folium.Popup(max_width='100%').add_child(
                                             folium.features.VegaLite(make_graphs(values)[location])
-                                            )).add_to(main_map)
+                                            )).add_to(map1)
 
-    return main_map
+    return map1
 
 
-#==== Initial parameters
+def prepare_data_for_map2(values, coordinates):
+    '''Prepare data for Viz #2.
+       The input is a dictionary of dataframes and one of coordinates.
+       The output is a dataframe with the following structure:
+
+       date | location | lat | lon | rain (mm) | type
+    
+    '''
+
+    # Empty container
+    container = []
+
+    # Iterate over dictionary of dfs
+    for location, dataframe in values.items():
+        df = dataframe
+        df['location'] = location
+        df['lat'] = coordinates[location][0]
+        df['lon'] = coordinates[location][1]
+        df = df[['date','location','lat','lon','rain (mm)','type']]
+
+        container.append(df)
+
+    # Concat dfs
+    prepared_data = pd.concat(container, axis=0).sort_values(by='date', ascending=True).reset_index(drop=True)
+
+    return prepared_data
+
+
+def make_map2(data, lat, lon, zoom):
+    '''Create map for Viz #2.'''
+
+    map2 = st.write(pdk.Deck(map_style="mapbox://styles/mapbox/light-v9",
+                      initial_view_state={
+                          "latitude": lat,
+                          "longitude": lon,
+                          "zoom": zoom,
+                          "pitch": 50
+                      },
+                       layers=[pdk.Layer(
+                                         "ColumnLayer",
+                                         data=data,
+                                         get_position=["lon", "lat"],
+                                         radius=100,
+                                         elevation_scale=4,
+                                         elevation_range=[0, 1000],
+                                         pickable=True,
+                                         extruded=True)]
+                      ))
+
+    return map2
+
+
+def add_time_slider(format, start_date_str, end_date_str):
+    '''Add time slider to Viz #2.
+       Provide start and end dates as strings: 'YYYY-MM-DD'.
+    '''
+
+    # Dimensions
+    cols1,_ = st.columns((2,2)) #Increase second value to get a narrower slider
+
+    # Define format. Available values can be 'MMM YYYY', 'DD MMM YYYY', 'MMM DD, YYYY'
+    format = format
+
+    # Define start and end dates
+    start_date = dt.date(year=int(start_date_str[0:4]), month=int(start_date_str[5:7]), day=int(start_date_str[8::]))
+    end_date = dt.date(year=int(end_date_str[0:4]), month=int(end_date_str[5:7]), day=int(end_date_str[8::]))
+
+    # Create slider and add it to map, returning the selected data
+    selected_date = st.slider(
+     'Select date',
+     min_value=start_date, value=end_date, max_value=end_date,
+     format=format)
+
+    return selected_date
+
+
+
+#==== Initial set up common to all maps
 root = os.path.abspath(os.path.join("__file__", "../"))
 locations = ['cambridge', 'eastbourne', 'lowestoft', 'heathrow', 'manston', 'oxford']
+values = read_data_from_pickles(locations)
+coordinates = read_coordinates()
 
 
 #============================================= VIZ 1
-values = read_data_from_pickles(locations)
-coordinates = read_coordinates()
-main_map1 = make_map(values=values, coordinates=coordinates)
+map1 = make_map1(values=values, coordinates=coordinates)
 
 #==== Create title and introductive text
 st.header("Digital Solutions for Civil Engineering: Machine Learning + interactive viz")
@@ -164,7 +248,7 @@ Click on each station to visualize the historic rainfall time series (in blue) a
 """)
 
 # Render map 1 on the app
-folium_static(main_map1, width=800, height=600)
+folium_static(map1, width=800, height=600)
 st.write("""---""")
 
 
@@ -173,5 +257,23 @@ st.header("Viz #2: interactive map showing rainfall as bars")
 st.write("""
 Move the time slider to visualize how the rainfall values change from one location to another and in relation to each other. 
 """)
+
+# Add time slider
+start_date_str = '2000-01-15'
+end_date_str = '2021-09-15'
+format = 'MMM YYYY'
+selected_date = add_time_slider(format=format, start_date_str=start_date_str, end_date_str=end_date_str)
+
+# Get prepared data and filer by date selected
+prepared_data = prepare_data_for_map2(values=values, coordinates=coordinates)
+data = prepared_data[prepared_data['date'] == pd.to_datetime(selected_date)]
+
+# Add map
+central_location = [51.65, 0.5]
+map2 = make_map2(data=data, lat=central_location[0], lon=central_location[1], zoom=7)
+
+
+
+
 
 
