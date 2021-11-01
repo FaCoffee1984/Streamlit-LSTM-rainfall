@@ -4,7 +4,7 @@
 [![Generic badge](https://img.shields.io/badge/IDE-VS%20Code%201.61.2-blue.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/ML%20package-tensorflow.keras%202.2-orange.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/ML%20model-LSTM-purple.svg)](https://shields.io/)
-[![Generic badge](https://img.shields.io/badge/interactive-dash-green.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/interactive-Streamlit-green.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/data%20type-monthly%20average%20rainfall-yellow.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/data%20source-UK%20MetOffice-red.svg)](https://shields.io/)
 -
@@ -16,9 +16,25 @@
 <i><a href='http://ecotrust-canada.github.io/markdown-toc/'><font size="10">Table of contents generated with markdown-toc</font></a></i>
 
 ## 1. Rationale
+For so long, consultants operating in the fields of Civil Engineering, Environment and Geosciences have relied on obsolete and static tools to deliver their work: `spreadsheets`.
 
+These files, however, although considered stable and part of the gold-standard, are struggling to keep up with the fast-paced world of data storage and visualizations, and come with a series of disadvantages:
+- **Staticity**: updating these files is very often a manual process
+- **Maintenance**: spreadsheets are difficult to maintain and document in the absence of a script that defines exactly the formulas used and assumptions made
+- **Consistency**: these tools can be customised by each user, leading to inconsistencies and lack of understanding when the files are passed on to colleagues and/or clients
+- **Versioning**: older versions are always supported by the newr ones, but the newer versions are almost never backported, leading to files becoming unreadable
+- **Storage**: these files are often found in multiple locations, making it difficult to map where they are
+- **Accessibility**: often, the data stored in spreadsheets do not have a consistent schema, are of different data types, and are difficult to access
+- **Upscaling**: the performance of spreadsheets is known to suffer dramatically from any increase in size
+- **Auditing**: as these files almost always come with hand-written formulas present in multiple cells, it is difficult to check their accuracy as well as the flowchart followed
+- **Predictions**: being spreadsheet-based means that the data, even if in pristine state, are difficult to be processed by a Machine Learning algorithm to provide predictions due the difficulty in backporting Machine Learning algorithm to a non-native language (for example, from Python to Microsoft Excel)
 
--
+For these reasons, this page offers an alternative solution where all the problems listed above are solved: an interactive app built with Python and [Streamlit](https://streamlit.io/). The architecture of the solution itself is quite simple:
+1. Obtain, pre-process, and load data
+2. Train Machine Learning algorithm
+3. Obtain predicted values
+4. Display historic and predicted values using an interactive dashboard which can also be updated in real time</br>
+<img src="images/Framework.png" width="700" height="300"/></br>
 
 ## 2. Architecture
 
