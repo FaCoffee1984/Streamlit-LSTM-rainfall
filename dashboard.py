@@ -154,28 +154,34 @@ def prepare_data_for_map2(values, coordinates):
 def make_map2(data, lat, lon, zoom):
     '''Create map for Viz #2.'''
 
-    map2 = st.write(pdk.Deck(map_style="mapbox://styles/mapbox/light-v9",
-                      initial_view_state={
-                          "latitude": lat,
-                          "longitude": lon,
-                          "zoom": zoom,
-                          "pitch": 60
-                      },
-                       tooltip={'html': 'Location: {location}</br> Rainfall (mm): {elevation}'},
-                       layers=[pdk.Layer(
-                                         "ColumnLayer",
-                                         data=data,
-                                         get_fill_color=[180, 0, 200, 140],
-                                         get_elevation='rain (mm)',
-                                         get_position=["lon", "lat"],
-                                         radius=2000,
-                                         colour='blue',
-                                         auto_highlight=True,
-                                         elevation_scale=10,
-                                         elevation_range=[0, 1000],
-                                         pickable=True,
-                                         extruded=True)]
-                      ))
+    column_layer = pdk.Layer(
+                             "ColumnLayer",
+                             data=data,
+                             get_position=["lon", "lat"],
+                             #get_evelation="rain (mm)",
+                             elevation_scale=20,
+                             radius=2000,
+                             get_fill_color=[180, 0, 200, 140],
+                             pickable=True,
+                             auto_highlight=True,
+                             extruded=True
+    )
+
+    tooltip={'html': 'Location: {location}</br> Date: {date} </br> Rainfall (mm): {rain_mm}</br> Type: {type}'}
+
+    r = pdk.Deck(column_layer,
+                 initial_view_state={
+                                    "latitude": lat,
+                                    "longitude": lon,
+                                    "zoom": zoom,
+                                    "pitch": 60
+                                },
+                 tooltip=tooltip,
+                 map_provider="mapbox",
+                 map_style='mapbox://styles/mapbox/light-v9',
+                )
+
+    map2 = st.write(r)
 
     return map2
 
@@ -199,6 +205,7 @@ def add_time_slider(format, start_date_str, end_date_str):
     selected_date = st.slider(
      'Select date',
      min_value=start_date, max_value=end_date,
+     value=dt.date(2000,1,15), 
      format=format)
 
     return selected_date
