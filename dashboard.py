@@ -132,20 +132,53 @@ def prepare_data_for_map2(values, coordinates):
     
     '''
 
+
+    def generate_whole_month(year_month):
+        '''Generates a single df with all dates given 'yyyy-mm'
+        '''
+
+        df = pd.DataFrame({'date': pd.date_range(
+                                    start = pd.Timestamp(year_month),                        
+                                    end = pd.Timestamp(year_month) + pd.offsets.MonthEnd(0),
+                                    freq = 'D'
+                                    )
+            })
+
+        return df
+
+
     # Empty container
     container = []
 
     # Iterate over dictionary of dfs
     for location, dataframe in values.items():
-        df = dataframe
-        df['location'] = location
-        df['lat'] = coordinates[location][0]
-        df['lon'] = coordinates[location][1]
-        df = df[['date','location','lat','lon','rain (mm)','type']]
+        df1 = dataframe
+        df1['y-m'] = df1['date'].dt.year.astype(str)+"-"+df1['date'].dt.month.astype(str)
 
-        container.append(df)
+        year_months = list(df1['date'].dt.year.astype(str)+"-"+df1['date'].dt.month.astype(str))
 
-    # Concat dfs
+        monthly_dfs= []
+
+        # For each 'YYYY-MM' string, create a new df with all days in that month and assign each day the average monthly rainfall 
+        for year_month in year_months:
+
+            df2 = generate_whole_month(year_month)
+            df2['location'] = location
+            df2['lat'] = coordinates[location][0]
+            df2['lon'] = coordinates[location][1]
+            df2['rain (mm)'] = df1[df1['y-m']==year_month]['rain (mm)'].values[0]
+            df2['type'] = df1[df1['y-m']==year_month]['type'].values[0]
+
+            monthly_dfs.append(df2)
+
+        # This is for a single location
+        monthly_df = pd.concat(monthly_dfs, axis=0).reset_index(drop=True)
+        monthly_df = monthly_df[['date','location','lat','lon','rain (mm)','type']]
+
+        # This is for all locations 
+        container.append(monthly_df)
+
+    # Concat dfs for all locations
     prepared_data = pd.concat(container, axis=0).sort_values(by='date', ascending=True).reset_index(drop=True)
 
     return prepared_data
@@ -167,7 +200,7 @@ def make_map2(data, lat, lon, zoom):
                              extruded=True
     )
 
-    tooltip={'html': 'Location: {location}</br> Date: {date} </br> Rainfall (mm): {rain_mm}</br> Type: {type}'}
+    tooltip={'html': 'Location: {location}</br> Type: {type}'}
 
     r = pdk.Deck(column_layer,
                  initial_view_state={
