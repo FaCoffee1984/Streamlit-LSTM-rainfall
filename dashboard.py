@@ -201,6 +201,8 @@ def make_map2(data, lat, lon, zoom):
                              coverage=1
     )
 
+    tooltip = {'text': '{location}, {rain (mm)} mm of rain ({type})'}
+
     r = pdk.Deck(my_layer,
                  initial_view_state={
                                     "latitude": lat,
@@ -208,6 +210,7 @@ def make_map2(data, lat, lon, zoom):
                                     "zoom": zoom,
                                     "pitch": 60
                                 },
+                 tooltip=tooltip,
                  map_provider="mapbox",
                  map_style='mapbox://styles/mapbox/light-v9',
                 )
