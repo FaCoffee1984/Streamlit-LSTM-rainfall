@@ -116,18 +116,32 @@ def make_map(values, coordinates):
     return main_map
 
 
-#==== Run functions
+#==== Initial parameters
 root = os.path.abspath(os.path.join("__file__", "../"))
 locations = ['cambridge', 'eastbourne', 'lowestoft', 'heathrow', 'manston', 'oxford']
 
+
+#============================================= VIZ 1
 values = read_data_from_pickles(locations)
 coordinates = read_coordinates()
-main_map = make_map(values=values, coordinates=coordinates)
+main_map1 = make_map(values=values, coordinates=coordinates)
 
 #==== Create title and introductive text
-st.header("Digital Solutions: combining ML and interactive viz")
+st.header("Digital Solutions for Civil Engineering: combining Machine Learning with interactive viz")
 st.write("""
-Introduction
+by Francesco Castellani (mailto:fr.caste.eng@gmail.com)
+
+This page shows an example of how data, predictions from a Machine Learning model, and interactive visualizations can live together. 
+This example uses monthly average rainfal data collected by the MetOffice for 6 locations in England.
+
+---
+
+The structure of this app is shown here: https://github.com/FaCoffee1984/Dash-LSTM-rainfall
+
+The data are freely available at: 
+https://www.metoffice.gov.uk/research/climate/maps-and-data/historic-station-data 
+
+---
 """)
 
 hide_menu_style = """
@@ -137,7 +151,20 @@ hide_menu_style = """
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-# Rander map on the app
-folium_static(main_map, width=800, height=600)
+st.header("Viz #1: interactive map showing rainfall time series")
+st.write("""
+Click on each station to visualize the historic rainfall time series (in blue) and the predicted values (in orange). 
+""")
+
+# Render map 1 on the app
+folium_static(main_map1, width=800, height=600)
+st.write("""---""")
+
+
+#============================================= VIZ 2
+st.header("Viz #2: interactive map showing rainfall as bars")
+st.write("""
+Move the time slider to visualize how the rainfall values change from one location to another and in relation to each other. 
+""")
 
 
