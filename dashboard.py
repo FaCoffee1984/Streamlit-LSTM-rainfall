@@ -159,14 +159,19 @@ def make_map2(data, lat, lon, zoom):
                           "latitude": lat,
                           "longitude": lon,
                           "zoom": zoom,
-                          "pitch": 50
+                          "pitch": 60
                       },
+                       tooltip={'html': 'Location: {location}</br> Rainfall (mm): {elevation}'},
                        layers=[pdk.Layer(
                                          "ColumnLayer",
                                          data=data,
+                                         get_fill_color=[180, 0, 200, 140],
+                                         get_elevation='rain (mm)',
                                          get_position=["lon", "lat"],
-                                         radius=100,
-                                         elevation_scale=4,
+                                         radius=2000,
+                                         colour='blue',
+                                         auto_highlight=True,
+                                         elevation_scale=10,
                                          elevation_range=[0, 1000],
                                          pickable=True,
                                          extruded=True)]
@@ -193,7 +198,7 @@ def add_time_slider(format, start_date_str, end_date_str):
     # Create slider and add it to map, returning the selected data
     selected_date = st.slider(
      'Select date',
-     min_value=start_date, value=end_date, max_value=end_date,
+     min_value=start_date, max_value=end_date,
      format=format)
 
     return selected_date
@@ -263,6 +268,7 @@ start_date_str = '2000-01-15'
 end_date_str = '2021-09-15'
 format = 'MMM YYYY'
 selected_date = add_time_slider(format=format, start_date_str=start_date_str, end_date_str=end_date_str)
+st.write("Date selected: ", selected_date)
 
 # Get prepared data and filer by date selected
 prepared_data = prepare_data_for_map2(values=values, coordinates=coordinates)
