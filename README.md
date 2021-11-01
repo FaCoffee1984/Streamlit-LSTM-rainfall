@@ -18,7 +18,7 @@
 ## 1. Rationale
 For so long, consultants operating in the fields of Civil Engineering, Environment and Geosciences have relied on obsolete and static tools to deliver their work: `spreadsheets`.
 
-These solutions, however, although stable, are struggling to keep up with the fast-paced world of data storage and visualizations, and come with a series of disadvantages:
+These files, however, although considered stable and part of the gold-standard, are struggling to keep up with the fast-paced world of data storage and visualizations, and come with a series of disadvantages:
 - **Staticity**: updating these files is very often a manual process
 - **Maintenance**: spreadsheets are difficult to maintain and document in the absence of a script that defines exactly the formulas used and assumptions made
 - **Consistency**: these tools can be customised by each user, leading to inconsistencies and lack of understanding when the files are passed on to colleagues and/or clients
@@ -33,8 +33,8 @@ For these reasons, this page offers an alternative solution where all the proble
 1. Obtain, pre-process, and load data
 2. Train Machine Learning algorithm
 3. Obtain predicted values
-4. Display historic and predicted values using an interactive dashboard which can also be updated in real time
-<img src="images/Framework.png" width="700" height="100"/></br>
+4. Display historic and predicted values using an interactive dashboard which can also be updated in real time</br>
+<img src="images/Framework.png" width="700" height="300"/></br>
 
 ## 2. Architecture
 
