@@ -167,6 +167,7 @@ def prepare_data_for_map2(values, coordinates):
             df2['lat'] = coordinates[location][0]
             df2['lon'] = coordinates[location][1]
             df2['rain (mm)'] = df1[df1['y-m']==year_month]['rain (mm)'].values[0]
+            df2['rain (mm)'] = df2['rain (mm)'].round(decimals=2)
             df2['type'] = df1[df1['y-m']==year_month]['type'].values[0]
 
             monthly_dfs.append(df2)
@@ -201,7 +202,7 @@ def make_map2(data, lat, lon, zoom):
                              coverage=1
     )
 
-    tooltip = {'text': '{location}, {rain (mm)} mm of rain ({type})'}
+    tooltip = {'text': '{location}: {rain (mm)} mm of rain ({type})'}
 
     r = pdk.Deck(my_layer,
                  initial_view_state={
