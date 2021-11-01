@@ -127,14 +127,21 @@ coordinates = read_coordinates()
 main_map1 = make_map(values=values, coordinates=coordinates)
 
 #==== Create title and introductive text
-st.header("Digital Solutions for Civil Engineering: combining Machine Learning with interactive viz")
+st.header("Digital Solutions for Civil Engineering: Machine Learning + interactive viz")
 st.write("""
 by Francesco Castellani (mailto:fr.caste.eng@gmail.com)
 
-This page shows an example of how data, predictions from a Machine Learning model, and interactive visualizations can live together. 
-This example uses monthly average rainfal data collected by the MetOffice for 6 locations in England.
+This page shows an example of how data, predictions from a Machine Learning model, and interactive visualizations can live together in the same place. 
 
 ---
+
+This example uses monthly average rainfal data collected by the MetOffice for 6 locations in England:
+- Cambridge
+- Eastbourne
+- Heathrow
+- Lowestoft
+- Manston
+- Oxford
 
 The structure of this app is shown here: https://github.com/FaCoffee1984/Dash-LSTM-rainfall
 
