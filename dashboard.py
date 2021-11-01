@@ -308,9 +308,8 @@ Move the time slider to visualize how the rainfall values change from one locati
 # Add time slider
 start_date_str = '2000-01-15'
 end_date_str = '2021-09-15'
-format = 'MMM YYYY' 
+format = 'DD MMM YYYY' 
 selected_date = add_time_slider(format=format, start_date_str=start_date_str, end_date_str=end_date_str)
-st.write("Date selected: ", selected_date)
 
 # Get prepared data and filer by date selected
 prepared_data = prepare_data_for_map2(values=values, coordinates=coordinates)
