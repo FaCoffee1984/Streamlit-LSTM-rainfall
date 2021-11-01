@@ -13,7 +13,6 @@ from branca.colormap import linear, LinearColormap
 import pydeck as pdk
 from dateutil.relativedelta import relativedelta # to add days or years
 import datetime as dt
-import streamlit.components.v1 as components
 
 
 
@@ -188,15 +187,10 @@ def prepare_data_for_map2(values, coordinates):
 def make_map2(data, lat, lon, zoom):
     '''Create map for Viz #2.'''
 
-    view = pdk.data_utils.compute_view(data[["lat", "lon"]])
-    view.pitch = 60
-    view.zoom = 11
-
     my_layer = pdk.Layer(
                              "ColumnLayer",
                              data=data,
                              get_position=["lon", "lat"],
-                             get_elevation='rain (mm)',
                              elevation_scale=50,
                              elevation_range=[0, 3000],
                              radius=2000,
@@ -207,19 +201,20 @@ def make_map2(data, lat, lon, zoom):
                              coverage=1
     )
 
-    tooltip={'html': 'Location: {location}</br> Rainfall: {data}</br> Type: {type}</br> Date: {date}',
-             'style': {"background": "grey", "color": "white", "font-family": '"Helvetica Neue", Arial', "z-index": "10000"}}
-
     r = pdk.Deck(my_layer,
-                 initial_view_state=view,
-                 tooltip=tooltip,
+                 initial_view_state={
+                                    "latitude": lat,
+                                    "longitude": lon,
+                                    "zoom": zoom,
+                                    "pitch": 60
+                                },
                  map_provider="mapbox",
                  map_style='mapbox://styles/mapbox/light-v9',
                 )
 
-    r.to_html('viz2_column_layer.html')
+    map2 = st.write(r)
 
-    return 
+    return map2
 
 
 def add_time_slider(format, start_date_str, end_date_str):
@@ -309,7 +304,7 @@ Move the time slider to visualize how the rainfall values change from one locati
 # Add time slider
 start_date_str = '2000-01-15'
 end_date_str = '2021-09-15'
-format = 'MMM YYYY'
+format = 'MMM YYYY' 
 selected_date = add_time_slider(format=format, start_date_str=start_date_str, end_date_str=end_date_str)
 st.write("Date selected: ", selected_date)
 
@@ -319,10 +314,10 @@ data = prepared_data[prepared_data['date'] == pd.to_datetime(selected_date)]
 
 # Add map
 central_location = [51.65, 0.5]
-#map2 = make_map2(data=data, lat=central_location[0], lon=central_location[1], zoom=7)
+map2 = make_map2(data=data, lat=central_location[0], lon=central_location[1], zoom=7)
+folium_static(map2, width=800, height=600)
 
 
-HtmlFile = open(r'C:\Users\CAS85405\python-dash-example\viz2_column_layer.html', 'r', encoding='utf-8')
-source_code = HtmlFile.read() 
-components.html(source_code, width=400, height=400)
+
+
 
