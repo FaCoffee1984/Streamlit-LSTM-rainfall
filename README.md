@@ -34,7 +34,7 @@ For these reasons, this page offers an alternative solution where all the proble
 2. Train Machine Learning algorithm
 3. Obtain predicted values
 4. Display historic and predicted values using an interactive dashboard which can also be updated in real time</br>
-<img src="images/Framework.png" width="700" height="250"/></br>
+<img src="images/Framework.png" width="700" height="300"/></br>
 
 ## 2. Architecture
 The predictions were obtained using a particular type of Recurrent Neural Networks known as Long-Short Term Memory ([LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory)). Its architecture makes it a suitable algorithm to use in sequence-to-sequence problems, as is the case with predicting rainfall.
