@@ -183,7 +183,7 @@ This page shows an example of how data, predictions from a Machine Learning mode
 
 # Add image
 image = Image.open('./images/Framework.png')
-st.image(image, caption='The digital framework used by this app. The box in grey represents future developments to enable real-time updates.')
+st.image(image, caption='The digital framework used by this app. The boxes in grey represents future developments to enable real-time updates.')
 
 st.write("""
 ---
