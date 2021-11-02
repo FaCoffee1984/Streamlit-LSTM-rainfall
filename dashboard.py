@@ -182,7 +182,7 @@ This page shows an example of how data, predictions from a Machine Learning mode
 """) 
 
 # Add image
-image = Image.open(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\images\Framework.png')
+image = Image.open('./images/Framework.png')
 st.image(image, caption='The digital framework used by this app. The box in grey represents future developments to enable real-time updates.')
 
 st.write("""
