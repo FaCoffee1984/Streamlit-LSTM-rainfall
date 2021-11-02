@@ -2,16 +2,11 @@
 
 import os
 import pandas as pd
-import numpy as np
 import streamlit as st
 import altair as alt
 from streamlit_folium import folium_static
 import folium
-import pickle
-from branca.colormap import linear, LinearColormap
 import pydeck as pdk
-from dateutil.relativedelta import relativedelta # to add days or years
-import datetime as dt
 from utils import read_data_from_pickles, read_coordinates, add_time_slider
 
 
