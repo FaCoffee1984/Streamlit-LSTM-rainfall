@@ -179,11 +179,14 @@ by Francesco Castellani (mailto:fr.caste.eng@gmail.com)
 st.write("""
 ---
 This page shows an example of how data, predictions from a Machine Learning model, and interactive visualizations can live together in the same place. 
+
+Digital framewrok:
+
 """) 
 
 # Add image
 image = Image.open('./images/Framework.png')
-st.image(image, caption='The digital framework used by this app. The boxes in grey represents future developments to enable real-time updates.')
+st.image(image, caption='The digital framework used by this app. The boxes in grey represent future developments to enable real-time updates.')
 
 st.write("""
 ---
