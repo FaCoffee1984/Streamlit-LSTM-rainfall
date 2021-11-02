@@ -180,7 +180,7 @@ st.write("""
 ---
 This page shows an example of how data, predictions from a Machine Learning model, and interactive visualizations can live together in the same place. 
 
-Digital framewrok:
+Digital framework used by this app:
 
 """) 
 
