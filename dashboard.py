@@ -7,7 +7,7 @@ import altair as alt
 from streamlit_folium import folium_static
 import folium
 import pydeck as pdk
-import utils_class as utils 
+from utils_class import Utils
 from PIL import Image
 
 
@@ -163,8 +163,8 @@ def make_map2(data, lat, lon, zoom):
 #==== Initial set up common to all maps
 root = os.path.abspath(os.path.join("__file__", "../"))
 locations = ['cambridge', 'eastbourne', 'lowestoft', 'heathrow', 'manston', 'oxford']
-values = utils.read_data_from_pickles(locations)
-coordinates = utils.read_coordinates()
+values = Utils.read_data_from_pickles(locations)
+coordinates = Utils.read_coordinates()
 
 
 #============================================= VIZ 1
@@ -231,7 +231,7 @@ Move the time slider to visualize how the rainfall values change from one locati
 start_date_str = '2000-01-15'
 end_date_str = '2021-09-15'
 format = 'DD MMM YYYY' 
-selected_date = utils.add_time_slider(format=format, start_date_str=start_date_str, end_date_str=end_date_str)
+selected_date = Utils.add_time_slider(format=format, start_date_str=start_date_str, end_date_str=end_date_str)
 
 # Get prepared data and filer by date selected
 prepared_data = prepare_data_for_map2(values=values, coordinates=coordinates)
