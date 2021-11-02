@@ -184,7 +184,7 @@ This page shows an example of how data, predictions from a Machine Learning mode
 
 # Add image
 image = Image.open(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\images\Framework.png')
-st.image(image, caption='The digital framework used by this app. The box in grey represents future developments.')
+st.image(image, caption='The digital framework used by this app. The box in grey represents future developments to enable real-time updates.')
 
 st.write("""
 ---
@@ -200,6 +200,7 @@ The structure of this app is shown here: https://github.com/FaCoffee1984/Streaml
 
 The data are freely available at: 
 https://www.metoffice.gov.uk/research/climate/maps-and-data/historic-station-data 
+
 ---
 """)
 
