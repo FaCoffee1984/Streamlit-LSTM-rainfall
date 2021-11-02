@@ -188,7 +188,7 @@ st.image(image, caption='The digital framework used by this app. The box in grey
 
 st.write("""
 ---
-This example uses monthly average rainfal data collected by the MetOffice for 6 locations in England:
+This example uses monthly average rainfall data collected by the MetOffice for 6 locations in England:
 - Cambridge
 - Eastbourne
 - Heathrow
