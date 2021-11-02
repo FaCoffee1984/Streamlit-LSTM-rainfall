@@ -8,4 +8,5 @@ plotly==5.3.1
 pydeck==0.6.2
 scikit-learn==0.22.1
 streamlit==1.1.0
+streamlit-folium==0.4.0
 tensorflow==2.2.0
