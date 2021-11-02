@@ -8,7 +8,7 @@ from streamlit_folium import folium_static
 import folium
 import pydeck as pdk
 from utils import read_data_from_pickles, read_coordinates, add_time_slider
-
+from PIL import Image
 
 
 @st.cache(allow_output_mutation=True)
@@ -172,13 +172,22 @@ map1 = make_map1(values=values, coordinates=coordinates)
 
 #==== Create title and introductive text
 st.header("Digital Solutions for Civil Engineering: Machine Learning + interactive viz")
+
 st.write("""
 by Francesco Castellani (mailto:fr.caste.eng@gmail.com)
+""")
 
-This page shows an example of how data, predictions from a Machine Learning model, and interactive visualizations can live together in the same place. 
-
+st.write("""
 ---
+This page shows an example of how data, predictions from a Machine Learning model, and interactive visualizations can live together in the same place. 
+""") 
 
+# Add image
+image = Image.open(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\images\Framework.png')
+st.image(image, caption='The digital framework used by this app. The box in grey represents future developments.')
+
+st.write("""
+---
 This example uses monthly average rainfal data collected by the MetOffice for 6 locations in England:
 - Cambridge
 - Eastbourne
@@ -191,7 +200,6 @@ The structure of this app is shown here: https://github.com/FaCoffee1984/Streaml
 
 The data are freely available at: 
 https://www.metoffice.gov.uk/research/climate/maps-and-data/historic-station-data 
-
 ---
 """)
 
