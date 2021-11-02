@@ -20,7 +20,7 @@ class Utils:
     def read_data_from_pickles(locations):
         '''Read rainfall data and predictions from pickle file.'''
 
-        with open(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\results\evaluation\eval.pkl', 'rb') as f:
+        with open('./Dash-LSTM-rainfall/results/evaluation/eval.pkl', 'rb') as f:
             data = pickle.load(f)
 
         # Extract data for all locations
@@ -58,7 +58,7 @@ class Utils:
     def read_coordinates():
         '''Read coordinates from file.'''
 
-        base_file = pd.read_csv(r'C:\Users\CAS85405\python-dash-example\Dash-LSTM-rainfall\data\LOCATIONS.csv')
+        base_file = pd.read_csv('./Dash-LSTM-rainfall/data/LOCATIONS.csv')
 
         # Extract data for all locations
         coordinates = {}
