@@ -46,7 +46,7 @@ The image below shows the steps used to obtain the rainfall predictions. The cru
 - Past values: `n=120`
 - Future values: `m=24`
 
-This means that the LSTM network needs 120 historical values to predict 24 future values. Given that the the network was fed monthly average rainfall values, `n` corresponds to 10 years and `m` corresponds to 2 years. So, the network needs 10 years' worth of data to predict the next 2 years.
+This means that the LSTM network needs 120 historical values to predict 24 future values. Given that the the network was fed monthly average rainfall values, `n` corresponds to 10 years and `m` corresponds to 2 years. So, the network needs 10 years' worth of data to predict the next 2 years, which entails that segment **3** is also 24 values or 2 years in length.
 
 <img src="images/Architecture.png" width="700" height="400"/></br>
 
