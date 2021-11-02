@@ -6,7 +6,6 @@ pandas==1.1.5
 Pillow==8.0.1
 plotly==5.3.1
 pydeck==0.6.2
-python==3.6.10
 scikit-learn==0.22.1
 streamlit==1.1.0
 streamlit-folium==0.4.0
