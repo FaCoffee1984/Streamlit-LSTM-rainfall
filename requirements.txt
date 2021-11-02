@@ -1,0 +1,11 @@
+altair==4.1.0
+folium==0.12.1
+matplotlib==3.3.4
+numpy==1.19.5
+pandas==1.1.5
+Pillow==8.0.1
+plotly==5.3.1
+pydeck==0.6.2
+scikit-learn==0.22.1
+streamlit==1.1.0
+tensorflow==2.2.0

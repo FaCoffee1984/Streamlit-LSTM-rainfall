@@ -131,7 +131,6 @@ def make_map2(data, lat, lon, zoom):
                              data=data,
                              get_position=["lon", "lat"],
                              elevation_scale=50,
-                             elevation_range=[0, 3000],
                              radius=2000,
                              get_fill_color=[180, 0, 200, 140],
                              pickable=True,
@@ -240,4 +239,4 @@ data = prepared_data[prepared_data['date'] == pd.to_datetime(selected_date)]
 # Add map
 central_location = [51.65, 0.5]
 map2 = make_map2(data=data, lat=central_location[0], lon=central_location[1], zoom=7)
-folium_static(map2, width=800, height=600) 
+folium_static(map2, width=800, height=600)  

@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from datetime import datetime
-import re
 
 
 def extract_values(line):
