@@ -34,12 +34,23 @@ For these reasons, this page offers an alternative solution where all the proble
 2. Train Machine Learning algorithm
 3. Obtain predicted values
 4. Display historic and predicted values using an interactive dashboard which can also be updated in real time</br>
-<img src="images/Framework.png" width="700" height="300"/></br>
+<img src="images/Framework.png" width="700" height="250"/></br>
 
 ## 2. Architecture
+The predictions were obtained using a particular type of Recurrent Neural Networks known as Long-Short Term Memory ([LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory)). Its architecture makes it a suitable algorithm to use in sequence-to-sequence problems, as is the case with predicting rainfall.
+
+The image below shows a high-level representation of the architecture of this network. The idea is that the network receives an input vector *i* and returns an output vector *o*. The LSTM box is composed of a sequence of network chunks processing the data. The operations that happen within each chunk involve remembering values over arbitrary time intervals (e.g., the Memory) as well as using state functions that allow data and gradients to move on to the next chunk. A more detailed explanation is available [here](https://colah.github.io/posts/2015-08-Understanding-LSTMs/).</br>
+<img src="images/LSTM.png" width="700" height="400"/></br>
+
+The image below shows the steps used to obtain the rainfall predictions. The crucial part is to specify the length of segments **1** and **2**. In other words, this means specifying how many *n past values* are needed by the network to predict *m future values*. These parameters are defined in the network set-up, and in the case of this app, the following values were used:
+- Past values: `n=120`
+- Future values: `m=24`
+
+This means that the LSTM network needs 120 historical values to predict 24 future values. Given that the the network was fed monthly average rainfall values, `n` corresponds to 10 years and `m` corresponds to 2 years. So, the network needs 10 years' worth of data to predict the next 2 years, which entails that segment **3** is also 24 values or 2 years in length.
+
+<img src="images/Architecture.png" width="700" height="400"/></br>
 
 
--
 
 ## 3. Snapshots
 - **Rainfall time series for the 6 locations**. </br> 
