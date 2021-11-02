@@ -296,7 +296,7 @@ Click on each station to visualize the historic rainfall time series (in blue) a
 
 # Render map 1 on the app
 folium_static(map1, width=800, height=600)
-st.write("""---""")
+st.write("""---""")  
 
 
 #============================================= VIZ 2
