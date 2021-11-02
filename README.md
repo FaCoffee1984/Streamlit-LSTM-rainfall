@@ -1,4 +1,4 @@
-# Python-Dash-LSTM-rainfall
+# Python-Streamlit-LSTM-rainfall
 
 [![Generic badge](https://img.shields.io/badge/language-python%203.6.10-navy.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/IDE-VS%20Code%201.61.2-blue.svg)](https://shields.io/)
