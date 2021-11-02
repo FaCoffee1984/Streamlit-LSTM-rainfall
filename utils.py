@@ -68,6 +68,7 @@ def read_coordinates():
 def add_time_slider(format, start_date_str, end_date_str):
     '''Add time slider to Viz #2.
        Provide start and end dates as strings: 'YYYY-MM-DD'.
+       Returns the date currently selected on the slider by the user.
     '''
 
     # Dimensions
