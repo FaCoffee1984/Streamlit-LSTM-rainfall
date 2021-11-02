@@ -27,7 +27,7 @@ These files, however, although considered stable and part of the gold-standard, 
 - **Accessibility**: often, the data stored in spreadsheets do not have a consistent schema, are of different data types, and are difficult to access
 - **Upscaling**: the performance of spreadsheets is known to suffer dramatically from any increase in size
 - **Auditing**: as these files almost always come with hand-written formulas present in multiple cells, it is difficult to check their accuracy as well as the flowchart followed
-- **Predictions**: being spreadsheet-based means that the data, even if in pristine state, are difficult to be processed by a Machine Learning algorithm to provide predictions due the difficulty in backporting Machine Learning algorithm to a non-native language (for example, from Python to Microsoft Excel)
+- **Predictions**: being spreadsheet-based means that the data, even if in pristine state, are troublesome to be processed by a Machine Learning algorithm to provide predictions due the difficulty in backporting ML algorithms to a non-native language (for example, from Python to Microsoft Excel)
 
 For these reasons, this page offers an alternative solution where all the problems listed above are solved: an interactive app built with Python and [Streamlit](https://streamlit.io/). The architecture of the solution itself is quite simple:
 1. Obtain, pre-process, and load data
