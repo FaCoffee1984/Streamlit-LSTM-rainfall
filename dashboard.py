@@ -3,7 +3,6 @@
 import os
 import pandas as pd
 import numpy as np
-import json
 import streamlit as st
 import altair as alt
 from streamlit_folium import folium_static
