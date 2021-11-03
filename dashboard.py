@@ -120,6 +120,9 @@ def prepare_data_for_map2(values, coordinates):
     # Concat dfs for all locations
     prepared_data = pd.concat(container, axis=0).sort_values(by='date', ascending=True).reset_index(drop=True)
 
+    # Get rid of parentheses in rain column to avoid pydeck errors in rendering the correct column heights
+    prepared_data = prepared_data.rename(columns={'rain (mm)': 'rain'})
+
     return prepared_data
 
 
@@ -130,16 +133,17 @@ def make_map2(data, lat, lon, zoom):
                              "ColumnLayer",
                              data=data,
                              get_position=["lon", "lat"],
-                             elevation_scale=50,
+                             get_elevation="rain",
+                             elevation_scale=600, #Magnifies elevation
                              radius=2000,
-                             get_fill_color=[180, 0, 200, 140],
+                             get_fill_color=[51, 102, 204, 150],
                              pickable=True,
                              auto_highlight=True,
                              extruded=True,
                              coverage=1
     )
 
-    tooltip = {'text': '{location}: {rain (mm)} mm of rain ({type})'}
+    tooltip = {'text': '{location}: {rain} mm of rain ({type})'}
 
     r = pdk.Deck(my_layer,
                  initial_view_state={
