@@ -7,6 +7,7 @@
 [![Generic badge](https://img.shields.io/badge/interactive-Streamlit-green.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/data%20type-monthly%20average%20rainfall-yellow.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/data%20source-UK%20MetOffice-red.svg)](https://shields.io/)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FFaCoffee1984%2FStreamlit-LSTM-rainfall&count_bg=%2386F7FD&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 -
 # Table of contents
 - [1. Rationale](#1-rationale)
