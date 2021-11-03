@@ -13,6 +13,7 @@
 - [1. Rationale](#1-rationale)
 - [2. Architecture](#2-architecture)
 - [3. Snapshots](#3-snapshots)
+- [4. App](#4-app)
 
 <i><a href='http://ecotrust-canada.github.io/markdown-toc/'><font size="10">Table of contents generated with markdown-toc</font></a></i>
 
@@ -65,3 +66,7 @@ The areas circled in black represent batches of data where the model failed to p
   - Lowestoft seems to be the location where the model performs best: the Root Mean Squared Error ([RMSE](https://en.wikipedia.org/wiki/Root-mean-square_deviation)), which is used as a way of assessing the average distance between the predicted and the observed values, is the lowest recorded (35.81 mm over 2 years' worth of data). 
   - Overall, the LSTM models used seem to capture the trends most of the times. When the observed values peak, the models have a mixed behaviour: at times they don't respond well to spikes (see bottom right, Oxford, October 2020), while in other situations they do (see top right, Eastbourne, January 2021). This is probably due to the erratic behaviour of rainfall extremes, which are difficult to model using a univariate approach like this (e.g., the only predictor used in this example is the rainfall itself; multivariate approaches would use additional variables such as elevation, latitude, wind, humidity, etc.). </br>
 <img src="images/Evaluation.png" width="700" height="400"/></br>
+
+## 4. App
+The structure of this app is shown in the image below.
+<img src="images/App_structure.png" width="700" height="400"/></br>
