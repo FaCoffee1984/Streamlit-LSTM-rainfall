@@ -26,7 +26,7 @@ These files, however, although considered stable and part of the gold-standard, 
 - **Staticity**: updating these files is very often a manual process
 - **Maintenance**: spreadsheets are difficult to maintain and document in the absence of a script that defines exactly the formulas used and assumptions made
 - **Consistency**: these tools can be customised by each user, leading to inconsistencies and lack of understanding when the files are passed on to colleagues and/or clients
-- **Versioning**: older versions are always supported by the newr ones, but the newer versions are almost never backported, leading to files becoming unreadable
+- **Versioning**: older versions are always supported by the newer ones, but the newer versions are almost never backported, leading to files becoming unreadable
 - **Storage**: these files are often found in multiple locations, making it difficult to map where they are
 - **Accessibility**: often, the data stored in spreadsheets do not have a consistent schema, are of different data types, and are difficult to access
 - **Upscaling**: the performance of spreadsheets is known to suffer dramatically from any increase in size
